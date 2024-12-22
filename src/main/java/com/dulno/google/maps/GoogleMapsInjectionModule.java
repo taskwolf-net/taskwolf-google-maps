@@ -20,9 +20,6 @@ public class GoogleMapsInjectionModule extends AbstractModule {
   GoogleMapsDatabaseTable provideGoogleMapsDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace
   ) {
-    var googleMapsDatabaseTable = GoogleMapsDatabaseTable.create(connection, keyspace);
-    googleMapsDatabaseTable.createIfNotExists();
-    googleMapsDatabaseTable.createIndexIfNotExists("owner");
-    return googleMapsDatabaseTable;
+    return GoogleMapsDatabaseTable.create(connection, keyspace);
   }
 }

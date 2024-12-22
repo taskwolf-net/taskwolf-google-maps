@@ -20,14 +20,24 @@ public final class GoogleMapsDatabaseTable extends DatabaseTable {
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("owner", DatabaseDataType.UUID));
     columns.add(DatabaseColumn.create("apiKey", DatabaseDataType.TEXT));
-    return new GoogleMapsDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    var table = new GoogleMapsDatabaseTable(connection, keyspace, TABLE_NAME, columns);
+    table.createIfNotExists();
+    table.initializeViews();
+    return table;
   }
+
+  private DatabaseTable ownerView;
 
   private GoogleMapsDatabaseTable(
     DatabaseConnection connection, DatabaseKeyspace keyspace, String name,
     List<DatabaseColumn> columns
   ) {
     super(connection, keyspace, name, columns);
+  }
+
+  private void initializeViews() {
+    ownerView = createMaterializedViewIfNotExists("owner_view", "owner",
+      DatabaseColumn.Type.PARTITION_KEY);
   }
 
   public CompletableFuture<Void> insertGoogleMaps(GoogleMaps googleMaps) {
@@ -59,21 +69,19 @@ public final class GoogleMapsDatabaseTable extends DatabaseTable {
   }
 
   public CompletableFuture<Boolean> googleMapsExistsByOwner(UUID ownerId) {
-    //TODO: CREATE OWNER VIEW
     var condition = DatabaseCondition.of(
       DatabaseComparison.create("owner", ownerId));
-    return exists(condition);
+    return ownerView.exists(condition);
   }
 
   public CompletableFuture<GoogleMaps> findGoogleMaps(UUID id) {
-    return selectRow(id).thenApply(GoogleMaps::of);
+    return selectRow(id).thenApply(row -> GoogleMaps.of(row, this));
   }
 
   public CompletableFuture<List<GoogleMaps>> findGoogleMapsOfOwner(UUID ownerId) {
-    //TODO: CREATE OWNER VIEW
     var condition = DatabaseCondition.of(
       DatabaseComparison.create("owner", ownerId));
-    return selectRows(condition).thenApply(rows ->
-      rows.stream().map(GoogleMaps::of).toList());
+    return ownerView.selectRows(condition).thenApply(rows ->
+      rows.stream().map(row -> GoogleMaps.of(row, ownerView)).toList());
   }
 }
