@@ -43,12 +43,12 @@ public class GoogleMapsController extends DulnoRestController {
     HttpServletResponse response
   ) {
     var body = DulnoRequestBody.of(payload, response);
-    var apiKey = body.getString("apiKey");
     return findUser(request)
       .thenCompose(user -> userTargetDatabaseTable.findTargetSecured(user.id())
         .thenCompose(target -> findGoogleMapsOwner(user, target)
           .thenCompose(owner -> googleMapsDatabaseTable.generateAvailableGoogleMapsId()
-            .thenApply(id -> addGoogleMaps(id, owner, apiKey)))));
+            .thenApply(id -> addGoogleMaps(id, owner, body.getString("name"),
+              body.getString("apiKey"))))));
   }
 
   private CompletableFuture<UUID> findGoogleMapsOwner(User user, UUID target) {
@@ -59,8 +59,9 @@ public class GoogleMapsController extends DulnoRestController {
   }
 
   private Map<String, Object> addGoogleMaps(
-    UUID id, UUID ownerId, String apiKey
+    UUID id, UUID ownerId, String name, String apiKey
   ) {
+    googleMapsDatabaseTable.insertGoogleMaps(id, ownerId,  name, apiKey);
     return Map.of("success", true);
   }
 }

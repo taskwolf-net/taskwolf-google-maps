@@ -19,6 +19,7 @@ public final class GoogleMapsDatabaseTable extends DatabaseTable {
     columns.add(DatabaseColumn.create("id", DatabaseDataType.UUID,
       DatabaseColumn.Type.PRIMARY_KEY));
     columns.add(DatabaseColumn.create("owner", DatabaseDataType.UUID));
+    columns.add(DatabaseColumn.create("name", DatabaseDataType.TEXT));
     columns.add(DatabaseColumn.create("apiKey", DatabaseDataType.TEXT));
     var table = new GoogleMapsDatabaseTable(connection, keyspace, TABLE_NAME, columns);
     table.createIfNotExists();
@@ -42,13 +43,13 @@ public final class GoogleMapsDatabaseTable extends DatabaseTable {
 
   public CompletableFuture<Void> insertGoogleMaps(GoogleMaps googleMaps) {
     return insertGoogleMaps(googleMaps.id(), googleMaps.ownerId(),
-      googleMaps.apiKey());
+      googleMaps.name(), googleMaps.apiKey());
   }
 
   public CompletableFuture<Void> insertGoogleMaps(
-    UUID id, UUID ownerId, String apiKey
+    UUID id, UUID ownerId, String name, String apiKey
   ) {
-    return insert(DatabaseRow.of(id, ownerId, apiKey));
+    return insert(DatabaseRow.of(id, ownerId, name, apiKey));
   }
 
   public CompletableFuture<UUID> generateAvailableGoogleMapsId() {

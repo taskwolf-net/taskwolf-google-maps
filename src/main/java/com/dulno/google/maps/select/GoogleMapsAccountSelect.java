@@ -21,7 +21,8 @@ public class GoogleMapsAccountSelect implements InputComponentSelect {
   ) {
     return googleMapsDatabaseTable.findGoogleMapsOfOwner(target)
       .thenApply(googleMaps -> googleMaps.stream()
-        .map(entry -> InputComponentSelectEntry.create(entry.id().toString(), ""))
+        .map(entry -> InputComponentSelectEntry.create(entry.id().toString(),
+          entry.name()))
         .toList());
   }
 }

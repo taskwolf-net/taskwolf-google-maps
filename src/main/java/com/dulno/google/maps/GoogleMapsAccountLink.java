@@ -22,7 +22,7 @@ public final class GoogleMapsAccountLink implements AccountLink {
   public CompletableFuture<List<AccountLinkEntry>> findAccounts(UUID id) {
     return googleMapsDatabaseTable.findGoogleMapsOfOwner(id)
       .thenApply(googleMaps -> googleMaps.stream()
-        .map(entry -> AccountLinkEntry.create(entry.id().toString(), ""))
+        .map(entry -> AccountLinkEntry.create(entry.id().toString(), entry.name()))
         .toList());
   }
 

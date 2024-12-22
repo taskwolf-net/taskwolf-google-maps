@@ -21,10 +21,12 @@ public final class GoogleMaps {
   public static GoogleMaps of(DatabaseRow row, List<String> columns) {
     return create(row.findCell(columns.indexOf("id")).uuidValue(),
       row.findCell(columns.indexOf("owner")).uuidValue(),
+      row.findCell(columns.indexOf("name")).stringValue(),
       row.findCell(columns.indexOf("apiKey")).stringValue());
   }
 
   private final UUID id;
   private final UUID ownerId;
+  private final String name;
   private final String apiKey;
 }
