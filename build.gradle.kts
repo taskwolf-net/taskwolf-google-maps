@@ -43,6 +43,8 @@ dependencies {
   compileOnly("commons-io:commons-io:2.18.0")
 
   compileOnly("org.springframework.boot:spring-boot-starter-web:3.4.1")
+
+  implementation("com.google.maps:google-maps-services:2.2.0")
 }
 
 tasks.test {
