@@ -6,6 +6,7 @@ import com.dulno.core.action.ActionResult;
 import com.dulno.core.workflow.placeholder.PlaceholderDissolve;
 import com.dulno.google.maps.structure.GoogleMaps;
 import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import com.google.common.collect.Lists;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PlacesApi;
 import com.google.maps.model.LatLng;
@@ -13,7 +14,6 @@ import com.google.maps.model.PlacesSearchResult;
 import lombok.AllArgsConstructor;
 import org.json.JSONArray;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +27,7 @@ public final class GoogleMapsSearchPlacesActionExecutor implements ActionExecuto
   private String locationLatitude;
   private String locationLongitude;
   private String searchRadius;
+  private String pages;
 
   @Override
   public CompletableFuture<ActionResult> execute(Map<String, Object> information) {
@@ -39,9 +40,11 @@ public final class GoogleMapsSearchPlacesActionExecutor implements ActionExecuto
       var locationLongitude = Double.parseDouble(this.locationLongitude);
       searchRadius = dissolve.dissolve(searchRadius);
       var searchRadius = Integer.parseInt(this.searchRadius);
+      pages = dissolve.dissolve(pages);
+      var pages = Math.min(Integer.parseInt(this.pages), 3);
       return googleMapsDatabaseTable.googleMapsExists(accountId)
         .thenCompose(exists -> execute(exists, locationLatitude,
-          locationLongitude, searchRadius));
+          locationLongitude, searchRadius, pages));
     } catch (Exception exception) {
       return ActionResult.futureFailure("google.maps.action.places.search.failure.wrong.format");
     }
@@ -49,28 +52,38 @@ public final class GoogleMapsSearchPlacesActionExecutor implements ActionExecuto
 
   private CompletableFuture<ActionResult> execute(
     boolean googleMapsExists, double locationLatitude, double locationLongitude,
-    int searchRadius
+    int searchRadius, int pages
     ) {
     if (!googleMapsExists) {
       return ActionResult.futureFailure("google.maps.action.places.search.failure.account.not.found");
     }
     return googleMapsDatabaseTable.findGoogleMaps(accountId)
       .thenApplyAsync(account -> execute(account, locationLatitude,
-        locationLongitude, searchRadius));
+        locationLongitude, searchRadius, pages));
   }
 
   private ActionResult execute(
     GoogleMaps account, double locationLatitude, double locationLongitude,
-    int searchRadius
+    int searchRadius, int pages
   ) {
     try {
       var context = new GeoApiContext.Builder().apiKey(account.apiKey()).build();
       var location = new LatLng(locationLatitude, locationLongitude);
       var searchResponse = PlacesApi.nearbySearchQuery(context, location)
         .radius(searchRadius).keyword(placesQuery).await();
-      var places = Arrays.stream(searchResponse.results)
-        .map(this::buildPlaceInformation).toList();
-      return ActionResult.success(buildInformation(places));
+      var places = Lists.newArrayList(searchResponse.results);
+      var nextPageToken = searchResponse.nextPageToken;
+      var pageCount = 1;
+      while (nextPageToken != null && pageCount < pages) {
+        Thread.sleep(2000);
+        searchResponse = PlacesApi.nearbySearchNextPage(context, nextPageToken)
+          .await();
+        places.addAll(List.of(searchResponse.results));
+        nextPageToken = searchResponse.nextPageToken;
+        pageCount++;
+      }
+      return ActionResult.success(buildInformation(places.stream()
+        .map(this::buildPlaceInformation).toList()));
     } catch (Exception exception) {
       return ActionResult.failure(exception.getMessage());
     }
@@ -92,6 +105,7 @@ public final class GoogleMapsSearchPlacesActionExecutor implements ActionExecuto
     information.put("locationLatitude", locationLatitude);
     information.put("locationLongitude", locationLongitude);
     information.put("searchRadius", searchRadius);
+    information.put("pages", pages);
     return information;
   }
 }

@@ -30,6 +30,7 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
     contentColumns.add(DatabaseColumn.create("latitude", DatabaseDataType.TEXT));
     contentColumns.add(DatabaseColumn.create("longitude", DatabaseDataType.TEXT));
     contentColumns.add(DatabaseColumn.create("radius", DatabaseDataType.TEXT));
+    contentColumns.add(DatabaseColumn.create("pages", DatabaseDataType.TEXT));
     return new GoogleMapsSearchPlacesAction(
       googleMapsAccountSelect, googleMapsDatabaseTable,
       ActionContentDatabaseTable.create(databaseConnection, databaseKeyspace,
@@ -60,6 +61,8 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
         "locationLongitude", "google.maps.action.places.search.input.longitude.description", InputComponentDataType.TEXT))
       .withInputVariable(InputComponentVariable.createRequired("google.maps.action.places.search.input.radius.name",
         "searchRadius", "google.maps.action.places.search.input.radius.description", InputComponentDataType.TEXT))
+      .withInputVariable(InputComponentVariable.createOptional("google.maps.action.places.search.input.pages.name",
+        "pages", "google.maps.action.places.search.input.pages.description", InputComponentDataType.TEXT))
       .withOutputVariable(ListOutputComponentVariable.create("google.maps.action.places.search.output.places", "places",
         OutputComponentVariable.create("google.maps.action.places.search.output.place.id", "placeId"),
         OutputComponentVariable.create("google.maps.action.places.search.output.place.name", "placeName"),
@@ -69,6 +72,7 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
       .withOutputVariable(OutputComponentVariable.create("google.maps.action.places.search.output.latitude", "locationLatitude"))
       .withOutputVariable(OutputComponentVariable.create("google.maps.action.places.search.output.longitude", "locationLongitude"))
       .withOutputVariable(OutputComponentVariable.create("google.maps.action.places.search.output.radius", "searchRadius"))
+      .withOutputVariable(OutputComponentVariable.create("google.maps.action.places.search.output.pages", "pages"))
       .build();
   }
 
@@ -82,7 +86,8 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
     return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(
       UUID.fromString((String) content.get("accountId")),
       content.get("placesQuery"), content.get("locationLatitude"),
-      content.get("locationLongitude"), content.get("searchRadius")));
+      content.get("locationLongitude"), content.get("searchRadius"),
+      content.get("pages")));
   }
 
   @Override
@@ -92,7 +97,8 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
         "placesQuery", row.findCell(2).stringValue(),
         "locationLatitude", row.findCell(3).stringValue(),
         "locationLongitude", row.findCell(4).stringValue(),
-        "searchRadius", row.findCell(5).stringValue()));
+        "searchRadius", row.findCell(5).stringValue(),
+        "pages", row.findCell(6).stringValue()));
   }
 
   @Override
@@ -101,7 +107,7 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
       GoogleMapsSearchPlacesActionExecutor.create(googleMapsDatabaseTable,
         content.findCell(1).uuidValue(), content.findCell(2).stringValue(),
         content.findCell(3).stringValue(), content.findCell(4).stringValue(),
-        content.findCell(5).stringValue()));
+        content.findCell(5).stringValue(), content.findCell(6).stringValue()));
   }
 
   @Override
