@@ -65,14 +65,13 @@ public final class GoogleMapsPlaceDetailsAction implements Action<GoogleMapsPlac
   @Override
   public CompletableFuture<Void> insert(UUID actionId, Map<String, Object> content) {
     return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(
-      UUID.fromString((String) content.get("accountIdentifier")),
-        content.get("placeId")));
+      UUID.fromString((String) content.get("accountId")), content.get("placeId")));
   }
 
   @Override
   public CompletableFuture<Map<String, Object>> findContent(UUID triggerId) {
     return contentDatabaseTable.findContent(triggerId).thenApply(row ->
-      Map.of("accountIdentifier", row.findCell(1).uuidValue().toString(),
+      Map.of("accountId", row.findCell(1).uuidValue().toString(),
         "placeId", row.findCell(2).stringValue()));
   }
 

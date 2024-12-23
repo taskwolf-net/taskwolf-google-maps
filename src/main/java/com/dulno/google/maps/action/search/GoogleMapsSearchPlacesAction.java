@@ -80,7 +80,7 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
   @Override
   public CompletableFuture<Void> insert(UUID actionId, Map<String, Object> content) {
     return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(
-      UUID.fromString((String) content.get("accountIdentifier")),
+      UUID.fromString((String) content.get("accountId")),
       content.get("placesQuery"), content.get("locationLatitude"),
       content.get("locationLongitude"), content.get("searchRadius")));
   }
@@ -88,7 +88,7 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
   @Override
   public CompletableFuture<Map<String, Object>> findContent(UUID triggerId) {
     return contentDatabaseTable.findContent(triggerId).thenApply(row ->
-      Map.of("accountIdentifier", row.findCell(1).uuidValue().toString(),
+      Map.of("accountId", row.findCell(1).uuidValue().toString(),
         "placesQuery", row.findCell(2).stringValue(),
         "locationLatitude", row.findCell(3).stringValue(),
         "locationLongitude", row.findCell(4).stringValue(),
