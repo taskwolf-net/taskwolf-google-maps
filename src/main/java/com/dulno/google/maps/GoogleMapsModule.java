@@ -12,6 +12,7 @@ import com.dulno.core.module.ModuleLoadPriority;
 import com.dulno.core.trigger.TriggerRepository;
 import com.dulno.core.workflow.component.input.InputComponentSelect;
 import com.dulno.google.maps.action.details.GoogleMapsPlaceDetailsAction;
+import com.dulno.google.maps.action.geocode.GoogleMapsGeocodeAction;
 import com.dulno.google.maps.action.search.GoogleMapsSearchPlacesAction;
 import com.dulno.google.maps.select.GoogleMapsAccountSelect;
 import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
@@ -59,7 +60,7 @@ public final class GoogleMapsModule extends Module {
   @Override
   public ModuleInformation moduleInformation() {
     return ModuleInformation.create("Google Maps", "", "google-maps",
-      ModuleInformation.Type.PUBLIC);
+      ModuleInformation.Type.PUBLIC, ModuleInformation.Novelty.NEW);
   }
 
   @Override
@@ -73,6 +74,9 @@ public final class GoogleMapsModule extends Module {
     var databaseKeyspace = injector().getInstance(DatabaseKeyspace.class);
     var googleMapsDatabaseTable = injector().getInstance(GoogleMapsDatabaseTable.class);
     var repository = ActionRepository.create();
+    repository.registerAction(GoogleMapsGeocodeAction.create(
+      googleMapsAccountSelect, googleMapsDatabaseTable, databaseConnection,
+      databaseKeyspace));
     repository.registerAction(GoogleMapsSearchPlacesAction.create(
       googleMapsAccountSelect, googleMapsDatabaseTable, databaseConnection,
       databaseKeyspace));
