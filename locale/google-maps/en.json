@@ -38,7 +38,7 @@
   "google.maps.action.places.search.output.radius": "Radius",
   "google.maps.action.places.search.output.pages": "Pages",
   "google.maps.action.places.search.failure.account.not.found": "An error occurred while searching places with Google Maps. The error occurred because the selected Google Maps account could not be found.",
-  "google.maps.action.places.search.failure.wrong.format": "An error occurred while searching places with Google Maps. The error has occurred because the latitude, longitude, radius or sides have not been set correctly.",
+  "google.maps.action.places.search.failure.wrong.format": "An error occurred while searching places with Google Maps. The error has occurred because the latitude, longitude, radius or pages have not been set correctly.",
 
   "google.maps.action.place.details.name": "Find place details",
   "google.maps.action.place.details.description": "Is used to obtain even more precise information about a certain location",
