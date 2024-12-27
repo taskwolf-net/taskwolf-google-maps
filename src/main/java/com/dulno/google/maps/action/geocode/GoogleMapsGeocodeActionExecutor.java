@@ -1,9 +1,9 @@
 package com.dulno.google.maps.action.geocode;
 
 import com.datastax.oss.driver.shaded.guava.common.collect.Maps;
-import com.dulno.core.action.ActionExecutor;
-import com.dulno.core.action.ActionResult;
-import com.dulno.core.workflow.placeholder.PlaceholderDissolve;
+import com.dulno.workflow.action.ActionExecutor;
+import com.dulno.workflow.action.ActionResult;
+import com.dulno.workflow.placeholder.PlaceholderDissolve;
 import com.dulno.google.maps.structure.GoogleMaps;
 import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
 import com.google.maps.GeoApiContext;
