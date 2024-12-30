@@ -22,6 +22,7 @@ import java.util.concurrent.CompletableFuture;
 @AllArgsConstructor(staticName = "create")
 public final class GoogleMapsSearchPlacesActionExecutor implements ActionExecutor {
   private final GoogleMapsDatabaseTable googleMapsDatabaseTable;
+  private final UUID ownerId;
   private final UUID accountId;
   private String placesQuery;
   private String locationLatitude;
@@ -67,6 +68,9 @@ public final class GoogleMapsSearchPlacesActionExecutor implements ActionExecuto
     int searchRadius, int pages
   ) {
     try {
+      if (!account.ownerId().equals(ownerId)) {
+        return ActionResult.failure("google.maps.action.places.search.failure.account.not.found");
+      }
       var context = new GeoApiContext.Builder().apiKey(account.apiKey()).build();
       var location = new LatLng(locationLatitude, locationLongitude);
       var searchResponse = PlacesApi.nearbySearchQuery(context, location)

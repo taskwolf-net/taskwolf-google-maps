@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @AllArgsConstructor(staticName = "create")
 public final class GoogleMapsPlaceDetailsActionExecutor implements ActionExecutor {
   private final GoogleMapsDatabaseTable googleMapsDatabaseTable;
+  private final UUID ownerId;
   private final UUID accountId;
   private String placeId;
 
@@ -39,6 +40,9 @@ public final class GoogleMapsPlaceDetailsActionExecutor implements ActionExecuto
 
   private ActionResult execute(GoogleMaps account) {
     try {
+      if (!account.ownerId().equals(ownerId)) {
+        return ActionResult.failure("google.maps.action.place.details.failure.account.not.found");
+      }
       var context = new GeoApiContext.Builder().apiKey(account.apiKey()).build();
       var placeDetails = PlacesApi.placeDetails(context, placeId).await();
       return ActionResult.success(buildInformation(placeDetails));

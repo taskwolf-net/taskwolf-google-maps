@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @AllArgsConstructor(staticName = "create")
 public final class GoogleMapsGeocodeActionExecutor implements ActionExecutor {
   private final GoogleMapsDatabaseTable googleMapsDatabaseTable;
+  private final UUID ownerId;
   private final UUID accountId;
   private String query;
 
@@ -39,6 +40,9 @@ public final class GoogleMapsGeocodeActionExecutor implements ActionExecutor {
 
   private ActionResult execute(GoogleMaps account) {
     try {
+      if (!account.ownerId().equals(ownerId)) {
+        return ActionResult.failure("google.maps.action.geocode.failure.account.not.found");
+      }
       var context = new GeoApiContext.Builder().apiKey(account.apiKey()).build();
       var geocoding = GeocodingApi.geocode(context, query).await();
       if (geocoding.length == 0) {

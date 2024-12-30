@@ -24,6 +24,7 @@ public final class GoogleMapsPlaceDetailsAction implements Action<GoogleMapsPlac
     DatabaseConnection databaseConnection, DatabaseKeyspace databaseKeyspace
   ) {
     var contentColumns = Lists.<DatabaseColumn>newArrayList();
+    contentColumns.add(DatabaseColumn.create("owner", DatabaseDataType.UUID));
     contentColumns.add(DatabaseColumn.create("account", DatabaseDataType.UUID));
     contentColumns.add(DatabaseColumn.create("place", DatabaseDataType.TEXT));
     return new GoogleMapsPlaceDetailsAction(
@@ -63,23 +64,26 @@ public final class GoogleMapsPlaceDetailsAction implements Action<GoogleMapsPlac
   }
 
   @Override
-  public CompletableFuture<Void> insert(UUID actionId, Map<String, Object> content) {
-    return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(
+  public CompletableFuture<Void> insert(
+    UUID actionId, UUID ownerId, Map<String, Object> content
+  ) {
+    return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(ownerId,
       UUID.fromString((String) content.get("accountId")), content.get("placeId")));
   }
 
   @Override
   public CompletableFuture<Map<String, Object>> findContent(UUID triggerId) {
     return contentDatabaseTable.findContent(triggerId).thenApply(row ->
-      Map.of("accountId", row.findCell(1).uuidValue().toString(),
-        "placeId", row.findCell(2).stringValue()));
+      Map.of("accountId", row.findCell(2).uuidValue().toString(),
+        "placeId", row.findCell(3).stringValue()));
   }
 
   @Override
   public CompletableFuture<GoogleMapsPlaceDetailsActionExecutor> build(UUID actionId) {
     return contentDatabaseTable.findContent(actionId).thenApply(content ->
       GoogleMapsPlaceDetailsActionExecutor.create(googleMapsDatabaseTable,
-        content.findCell(1).uuidValue(), content.findCell(2).stringValue()));
+        content.findCell(1).uuidValue(), content.findCell(2).uuidValue(),
+        content.findCell(3).stringValue()));
   }
 
   @Override

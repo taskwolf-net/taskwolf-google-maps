@@ -25,6 +25,7 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
     DatabaseConnection databaseConnection, DatabaseKeyspace databaseKeyspace
   ) {
     var contentColumns = Lists.<DatabaseColumn>newArrayList();
+    contentColumns.add(DatabaseColumn.create("owner", DatabaseDataType.UUID));
     contentColumns.add(DatabaseColumn.create("account", DatabaseDataType.UUID));
     contentColumns.add(DatabaseColumn.create("query", DatabaseDataType.TEXT));
     contentColumns.add(DatabaseColumn.create("latitude", DatabaseDataType.TEXT));
@@ -82,8 +83,10 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
   }
 
   @Override
-  public CompletableFuture<Void> insert(UUID actionId, Map<String, Object> content) {
-    return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(
+  public CompletableFuture<Void> insert(
+    UUID actionId, UUID ownerId, Map<String, Object> content
+  ) {
+    return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(ownerId,
       UUID.fromString((String) content.get("accountId")),
       content.get("placesQuery"), content.get("locationLatitude"),
       content.get("locationLongitude"), content.get("searchRadius"),
@@ -93,21 +96,22 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
   @Override
   public CompletableFuture<Map<String, Object>> findContent(UUID triggerId) {
     return contentDatabaseTable.findContent(triggerId).thenApply(row ->
-      Map.of("accountId", row.findCell(1).uuidValue().toString(),
-        "placesQuery", row.findCell(2).stringValue(),
-        "locationLatitude", row.findCell(3).stringValue(),
-        "locationLongitude", row.findCell(4).stringValue(),
-        "searchRadius", row.findCell(5).stringValue(),
-        "pages", row.findCell(6).stringValue()));
+      Map.of("accountId", row.findCell(2).uuidValue().toString(),
+        "placesQuery", row.findCell(3).stringValue(),
+        "locationLatitude", row.findCell(4).stringValue(),
+        "locationLongitude", row.findCell(5).stringValue(),
+        "searchRadius", row.findCell(6).stringValue(),
+        "pages", row.findCell(7).stringValue()));
   }
 
   @Override
   public CompletableFuture<GoogleMapsSearchPlacesActionExecutor> build(UUID actionId) {
     return contentDatabaseTable.findContent(actionId).thenApply(content ->
       GoogleMapsSearchPlacesActionExecutor.create(googleMapsDatabaseTable,
-        content.findCell(1).uuidValue(), content.findCell(2).stringValue(),
+        content.findCell(1).uuidValue(), content.findCell(2).uuidValue(),
         content.findCell(3).stringValue(), content.findCell(4).stringValue(),
-        content.findCell(5).stringValue(), content.findCell(6).stringValue()));
+        content.findCell(5).stringValue(), content.findCell(6).stringValue(),
+        content.findCell(7).stringValue()));
   }
 
   @Override
