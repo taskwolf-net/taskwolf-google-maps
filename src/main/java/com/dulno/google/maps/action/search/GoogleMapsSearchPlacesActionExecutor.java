@@ -42,6 +42,9 @@ public final class GoogleMapsSearchPlacesActionExecutor implements ActionExecuto
       searchRadius = dissolve.dissolve(searchRadius);
       var searchRadius = Integer.parseInt(this.searchRadius);
       pages = dissolve.dissolve(pages);
+      if (pages.isBlank() || pages.isEmpty()) {
+        pages = "1";
+      }
       var pages = Math.min(Integer.parseInt(this.pages), 3);
       return googleMapsDatabaseTable.googleMapsExists(accountId)
         .thenCompose(exists -> execute(exists, locationLatitude,
