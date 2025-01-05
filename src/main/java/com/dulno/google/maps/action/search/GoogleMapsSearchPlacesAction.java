@@ -86,11 +86,12 @@ public final class GoogleMapsSearchPlacesAction implements Action<GoogleMapsSear
   public CompletableFuture<Void> insert(
     UUID actionId, UUID ownerId, Map<String, Object> content
   ) {
+    var pages = content.get("pages");
     return contentDatabaseTable.insertContent(actionId, DatabaseRow.of(ownerId,
       UUID.fromString((String) content.get("accountId")),
       content.get("placesQuery"), content.get("locationLatitude"),
       content.get("locationLongitude"), content.get("searchRadius"),
-      content.get("pages")));
+      pages == null ? "" : pages));
   }
 
   @Override
