@@ -1,15 +1,6 @@
-<div align="center">
-  <img src="https://dulno.com/static/img/logo-light.webp" alt="logo" width="128"  height="auto" />
+# Dulno - Google Maps
 
-  <h1><b>Dulno - Google Maps</b><br><br></h1>
-
-</div>
+[![CI](https://github.com/taskwolf-net/taskwolf-google-maps/actions/workflows/ci.yml/badge.svg)](https://github.com/taskwolf-net/taskwolf-google-maps/actions/workflows/ci.yml)
 
 This module enables Dulno's customers to integrate Google Maps into their workflows and thus determine and use location and map-related data.
 
-## Status
-
-|      | Pipeline status                                                             |
-|------|-----------------------------------------------------------------------------|
-| main | ![](https://git.dulno.com/dulno/dulno-google-maps/badges/main/pipeline.svg) |
-| dev  | ![](https://git.dulno.com/dulno/dulno-google-maps/badges/dev/pipeline.svg)  |
