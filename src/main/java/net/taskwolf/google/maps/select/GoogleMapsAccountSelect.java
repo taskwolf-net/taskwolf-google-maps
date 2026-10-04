@@ -1,9 +1,9 @@
-package com.dulno.google.maps.select;
+package net.taskwolf.google.maps.select;
 
-import com.dulno.core.user.User;
-import com.dulno.workflow.component.input.InputComponentSelect;
-import com.dulno.workflow.component.input.InputComponentSelectEntry;
-import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import net.taskwolf.core.user.User;
+import net.taskwolf.workflow.component.input.InputComponentSelect;
+import net.taskwolf.workflow.component.input.InputComponentSelectEntry;
+import net.taskwolf.google.maps.structure.GoogleMapsDatabaseTable;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

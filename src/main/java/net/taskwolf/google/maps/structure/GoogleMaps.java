@@ -1,8 +1,8 @@
-package com.dulno.google.maps.structure;
+package net.taskwolf.google.maps.structure;
 
-import com.dulno.core.database.DatabaseColumn;
-import com.dulno.core.database.DatabaseRow;
-import com.dulno.core.database.DatabaseTable;
+import net.taskwolf.core.database.DatabaseColumn;
+import net.taskwolf.core.database.DatabaseRow;
+import net.taskwolf.core.database.DatabaseTable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Accessors;

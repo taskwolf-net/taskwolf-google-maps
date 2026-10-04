@@ -1,6 +1,6 @@
-package com.dulno.google.maps;
+package net.taskwolf.google.maps;
 
-import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import net.taskwolf.google.maps.structure.GoogleMapsDatabaseTable;
 import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContextInitializer;

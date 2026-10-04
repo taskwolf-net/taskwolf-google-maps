@@ -1,15 +1,15 @@
-package com.dulno.google.maps.action.search;
+package net.taskwolf.google.maps.action.search;
 
-import com.dulno.workflow.action.Action;
-import com.dulno.workflow.action.ActionContentDatabaseTable;
-import com.dulno.workflow.action.ActionInformation;
-import com.dulno.core.database.*;
-import com.dulno.workflow.component.input.InputComponentDataType;
-import com.dulno.workflow.component.input.InputComponentSelect;
-import com.dulno.workflow.component.input.InputComponentVariable;
-import com.dulno.workflow.component.output.ListOutputComponentVariable;
-import com.dulno.workflow.component.output.OutputComponentVariable;
-import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import net.taskwolf.workflow.action.Action;
+import net.taskwolf.workflow.action.ActionContentDatabaseTable;
+import net.taskwolf.workflow.action.ActionInformation;
+import net.taskwolf.core.database.*;
+import net.taskwolf.workflow.component.input.InputComponentDataType;
+import net.taskwolf.workflow.component.input.InputComponentSelect;
+import net.taskwolf.workflow.component.input.InputComponentVariable;
+import net.taskwolf.workflow.component.output.ListOutputComponentVariable;
+import net.taskwolf.workflow.component.output.OutputComponentVariable;
+import net.taskwolf.google.maps.structure.GoogleMapsDatabaseTable;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 

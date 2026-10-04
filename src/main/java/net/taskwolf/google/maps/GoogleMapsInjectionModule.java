@@ -1,8 +1,8 @@
-package com.dulno.google.maps;
+package net.taskwolf.google.maps;
 
-import com.dulno.core.database.DatabaseConnection;
-import com.dulno.core.database.DatabaseKeyspace;
-import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import net.taskwolf.core.database.DatabaseConnection;
+import net.taskwolf.core.database.DatabaseKeyspace;
+import net.taskwolf.google.maps.structure.GoogleMapsDatabaseTable;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;

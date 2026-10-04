@@ -1,5 +1,5 @@
 {
-  "google.maps.link.description": "Would you like to add another Google Maps account to integrate it into your automation with the help of Dulno? Just click on the logo.",
+  "google.maps.link.description": "Would you like to add another Google Maps account to integrate it into your automation with the help of Taskwolf? Just click on the logo.",
 
   "google.maps.action.geocode.name": "Find coordinates",
   "google.maps.action.geocode.description": "Is used to find the coordinates of a location",

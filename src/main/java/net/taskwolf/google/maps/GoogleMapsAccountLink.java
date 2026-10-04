@@ -1,8 +1,8 @@
-package com.dulno.google.maps;
+package net.taskwolf.google.maps;
 
-import com.dulno.core.account.AccountLink;
-import com.dulno.core.account.AccountLinkEntry;
-import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import net.taskwolf.core.account.AccountLink;
+import net.taskwolf.core.account.AccountLinkEntry;
+import net.taskwolf.google.maps.structure.GoogleMapsDatabaseTable;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public final class GoogleMapsAccountLink implements AccountLink {
 
   @Override
   public String registrationUrl(UUID id, String apiKey) {
-    return "https://dulno.com/google/maps/connect/";
+    return "https://taskwolf.net/google/maps/connect/";
   }
 
   @Override

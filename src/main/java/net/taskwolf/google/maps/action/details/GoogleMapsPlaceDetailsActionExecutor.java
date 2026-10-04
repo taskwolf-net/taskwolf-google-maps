@@ -1,11 +1,11 @@
-package com.dulno.google.maps.action.details;
+package net.taskwolf.google.maps.action.details;
 
 import com.datastax.oss.driver.shaded.guava.common.collect.Maps;
-import com.dulno.workflow.action.ActionExecutor;
-import com.dulno.workflow.action.ActionResult;
-import com.dulno.workflow.placeholder.PlaceholderDissolve;
-import com.dulno.google.maps.structure.GoogleMaps;
-import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import net.taskwolf.workflow.action.ActionExecutor;
+import net.taskwolf.workflow.action.ActionResult;
+import net.taskwolf.workflow.placeholder.PlaceholderDissolve;
+import net.taskwolf.google.maps.structure.GoogleMaps;
+import net.taskwolf.google.maps.structure.GoogleMapsDatabaseTable;
 import com.google.maps.GeoApiContext;
 import com.google.maps.PlacesApi;
 import com.google.maps.model.PlaceDetails;

@@ -1,12 +1,12 @@
-package com.dulno.google.maps.access;
+package net.taskwolf.google.maps.access;
 
-import com.dulno.core.access.DulnoRequestBody;
-import com.dulno.core.access.DulnoRestController;
-import com.dulno.core.organization.team.TeamTargetDatabaseTable;
-import com.dulno.core.user.User;
-import com.dulno.core.user.UserDatabaseTable;
-import com.dulno.core.user.UserTargetDatabaseTable;
-import com.dulno.google.maps.structure.GoogleMapsDatabaseTable;
+import net.taskwolf.core.access.TaskwolfRequestBody;
+import net.taskwolf.core.access.TaskwolfRestController;
+import net.taskwolf.core.organization.team.TeamTargetDatabaseTable;
+import net.taskwolf.core.user.User;
+import net.taskwolf.core.user.UserDatabaseTable;
+import net.taskwolf.core.user.UserTargetDatabaseTable;
+import net.taskwolf.google.maps.structure.GoogleMapsDatabaseTable;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +20,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-public class GoogleMapsController extends DulnoRestController {
+public class GoogleMapsController extends TaskwolfRestController {
   private final GoogleMapsDatabaseTable googleMapsDatabaseTable;
   private final UserTargetDatabaseTable userTargetDatabaseTable;
   private final TeamTargetDatabaseTable teamTargetDatabaseTable;
@@ -42,7 +42,7 @@ public class GoogleMapsController extends DulnoRestController {
     HttpServletRequest request, @RequestBody String payload,
     HttpServletResponse response
   ) {
-    var body = DulnoRequestBody.of(payload, response);
+    var body = TaskwolfRequestBody.of(payload, response);
     return findUser(request)
       .thenCompose(user -> userTargetDatabaseTable.findTargetSecured(user.id())
         .thenCompose(target -> findGoogleMapsOwner(user, target)
